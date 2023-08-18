@@ -24,3 +24,53 @@ SELECT * FROM animals WHERE name != 'Gabumon';
 -- Find all animals with a weight between 10.4kg and 17.3kg (including the animals with the weights that equals precisely 10.4kg or 17.3kg)
 SELECT * FROM animals WHERE weight_kg >= 10.4 and weight_kg <= 17.3;
 
+-- What animals belong to Melody Pond?
+SELECT full_name,name FROM animals
+INNER JOIN owners
+ON animals.owner_id = owners.id
+WHERE owners.id = 4;
+
+-- List of all animals that are pokemon
+SELECT animals.name,species.name
+FROM animals
+INNER JOIN species
+ON animals.species_id = species.id
+WHERE species.id = 1;
+
+-- List all owners and their animals, remember to include those that don't own any animal
+SELECT owners.full_name,animals.name
+FROM animals
+RIGHT JOIN owners
+ON animals.owner_id = owners.id;
+
+-- How many animals are there per species?
+SELECT COUNT(animals.name),species.name
+FROM animals
+INNER JOIN species
+ON animals.species_id = species.id
+GROUP BY species.name;
+
+-- List all Digimon owned by Jennifer Orwell
+SELECT owners.full_name,animals.name
+FROM animals
+INNER JOIN species
+ON animals.species_id = species.id
+INNER JOIN owners
+ON animals.owner_id = owners.id
+WHERE species.name = 'Digimon' and owners.id = 2;
+
+-- List all animals owned by Dean Winchester that haven't tried to escape
+SELECT owners.full_name,animals.name
+FROM animals
+INNER JOIN owners
+ON animals.owner_id = owners.id
+WHERE owners.id = 5 and animals.escape_attempts = 0;
+
+-- Who owns the most animals?
+SELECT owners.full_name, COUNT(animals.name) AS animal_count
+FROM animals
+INNER JOIN owners
+ON animals.owner_id = owners.id
+GROUP BY owners.full_name
+ORDER BY animal_count DESC
+LIMIT 1;
